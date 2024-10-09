@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3 uid="uid://cgg4um7adarhs"]
+
+[ext_resource type="Script" path="res://Scripts/Player/PlayerController.gd" id="1_vbd7a"]
+[ext_resource type="Script" path="res://Scripts/Player/Reticle.gd" id="12_6vk6n"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_g7e6a"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g17fm"]
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+script = ExtResource("1_vbd7a")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+fov = 60.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_g7e6a")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_g17fm")
+
+[node name="PlayerInterface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Reticle" type="CenterContainer" parent="PlayerInterface" node_paths=PackedStringArray("RETICULE_LINES", "PLAYER_CONTROLLER")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_6vk6n")
+RETICULE_LINES = [NodePath("Right"), NodePath("Bottom"), NodePath("Left")]
+PLAYER_CONTROLLER = NodePath("../..")
+RETICULE_DISTANCE = 5.0
+
+[node name="Right" type="Line2D" parent="PlayerInterface/Reticle"]
+position = Vector2(10, 0)
+points = PackedVector2Array(5, 0, 15, 0)
+width = 2.0
+
+[node name="Bottom" type="Line2D" parent="PlayerInterface/Reticle"]
+position = Vector2(0, 10)
+points = PackedVector2Array(0, 5, 0, 15)
+width = 2.0
+
+[node name="Left" type="Line2D" parent="PlayerInterface/Reticle"]
+position = Vector2(-10, 0)
+points = PackedVector2Array(-5, 0, -15, 0)
+width = 2.0
+
+[node name="FmodListener3D" type="FmodListener3D" parent="."]

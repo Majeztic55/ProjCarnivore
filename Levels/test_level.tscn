@@ -1,0 +1,72 @@
+[gd_scene load_steps=7 format=3 uid="uid://cqpa6fdypd7sa"]
+
+[ext_resource type="Material" uid="uid://vr8k30fvrdas" path="res://Materials/Mat_MeshGridDark1.tres" id="1_aetw7"]
+[ext_resource type="PackedScene" uid="uid://cgg4um7adarhs" path="res://Scenes/Player/player.tscn" id="1_tv8o1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6l03k"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_pt4ft"]
+points = PackedVector3Array(0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5)
+
+[sub_resource type="PrismMesh" id="PrismMesh_y3iol"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_uqjcu"]
+points = PackedVector3Array(0, 0.5, 0.5, 0.5, -0.5, 0.5, 0, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
+
+[node name="Test Level" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 0.1, 0, 0, 0, 100, 0, 0, 0)
+material_override = ExtResource("1_aetw7")
+mesh = SubResource("BoxMesh_6l03k")
+
+[node name="Floor_StaticBody3D" type="StaticBody3D" parent="Floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/Floor_StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_pt4ft")
+
+[node name="Floor2" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 5, 0, 0, 0, 1, 0, 2.5, -15.935)
+material_override = ExtResource("1_aetw7")
+mesh = SubResource("BoxMesh_6l03k")
+
+[node name="Floor_StaticBody3D" type="StaticBody3D" parent="Floor2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor2/Floor_StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_pt4ft")
+
+[node name="Floor3" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 3, 0, 0, 0, 1, 0, 1.55, -12.419)
+material_override = ExtResource("1_aetw7")
+mesh = SubResource("BoxMesh_6l03k")
+
+[node name="Floor_StaticBody3D" type="StaticBody3D" parent="Floor3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor3/Floor_StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_pt4ft")
+
+[node name="Floor4" type="MeshInstance3D" parent="."]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.564939, -9.15473)
+material_override = ExtResource("1_aetw7")
+mesh = SubResource("BoxMesh_6l03k")
+
+[node name="Floor_StaticBody3D" type="StaticBody3D" parent="Floor4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor4/Floor_StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_pt4ft")
+
+[node name="Ramp" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.18557e-07, -5, 0, 5, -2.18557e-07, 1.55294e-22, 8.47033e-22, 1.42109e-14, 1, -8.75737, 0.0048604, -12.4604)
+material_override = ExtResource("1_aetw7")
+mesh = SubResource("PrismMesh_y3iol")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ramp"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_uqjcu")
+
+[node name="Player" parent="." instance=ExtResource("1_tv8o1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.325288, 0.945615, 0, -0.945615, -0.325288, 0, 3.34185, 0)
