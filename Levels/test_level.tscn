@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cqpa6fdypd7sa"]
 
 [ext_resource type="Material" uid="uid://vr8k30fvrdas" path="res://Materials/Mat_MeshGridDark1.tres" id="1_aetw7"]
-[ext_resource type="PackedScene" uid="uid://cgg4um7adarhs" path="res://Scenes/Player/player.tscn" id="1_tv8o1"]
+[ext_resource type="PackedScene" uid="uid://dcc4verxko70a" path="res://Scenes/Player/playerV2.tscn" id="2_qvgge"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_6l03k"]
 
@@ -65,8 +65,8 @@ mesh = SubResource("PrismMesh_y3iol")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_uqjcu")
 
-[node name="Player" parent="." instance=ExtResource("1_tv8o1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="CharacterBody3D" parent="." instance=ExtResource("2_qvgge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.26106, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.325288, 0.945615, 0, -0.945615, -0.325288, 0, 3.34185, 0)
