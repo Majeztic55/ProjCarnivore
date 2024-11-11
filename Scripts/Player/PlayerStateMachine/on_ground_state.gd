@@ -14,6 +14,7 @@ var wish_jump : bool
 
 @export var animationTreeArms : AnimationTree
 @export var animationTreeLegs : AnimationTree
+@export var weapon_manager : WeaponManager
 
 func enter(host):
 	characterBody = host
@@ -21,18 +22,19 @@ func enter(host):
 
 func physics_process(host, delta):
 	if characterBody.is_on_floor():
-		process_input()
-		process_movement(delta)
-		manage_animationTreeLegs()
-		return str(name)
+		if Input.is_action_just_pressed("Shift"):
+			return str("Slide")
+		else:
+			process_input()
+			process_movement(delta)
+			manage_animationTreeLegs()
+			manage_animationTreeArms()
+			return str(name)
 	else:
 		return str("In_Air")
 	
 
 func process_input():
-	
-	if Input.is_action_just_pressed("Escape"):
-			get_tree().quit()
 	
 	direction = Vector3()
 	
@@ -91,6 +93,18 @@ func manage_animationTreeLegs():
 	var blendAmount : float
 	blendAmount = characterBody.velocity.length() / MAX_VELOCITY_GROUND
 	
-	animationTreeLegs["parameters/IdleToWalk/blend_amount"] = blendAmount
-	animationTreeArms["parameters/IdleToWalk/blend_amount"] = blendAmount
+	animationTreeLegs["parameters/IdleToWalking/IdleToWalkingBlend/blend_amount"] = blendAmount
+	
+
+func manage_animationTreeArms():
+	var blendAmount : float
+	blendAmount = characterBody.velocity.length() / MAX_VELOCITY_GROUND
+	
+	match weapon_manager.currentWeapon:
+		0:
+			animationTreeArms["parameters/Hands/HandsIdleToWalking/blend_amount"] = blendAmount
+		1:
+			animationTreeArms["parameters/Blades/BladesIdleToWalk/blend_amount"] = blendAmount
+		2:
+			animationTreeArms["parameters/Shotgun/ShotgunIdleToWalk/blend_amount"] = blendAmount
 	

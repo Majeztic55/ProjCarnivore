@@ -29,9 +29,6 @@ func physics_process(host, delta):
 
 func process_input():
 	
-	if Input.is_action_just_pressed("Escape"):
-			get_tree().quit()
-	
 	direction = Vector3()
 	
 	if Input.is_action_pressed("Foward"):
