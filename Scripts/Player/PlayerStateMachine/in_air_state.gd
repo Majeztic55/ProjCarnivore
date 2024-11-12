@@ -1,5 +1,7 @@
 extends State
 
+class_name In_Air_State
+
 var characterBody : CharacterBody3D
 
 const MAX_VELOCITY_AIR = 0.6

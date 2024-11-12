@@ -1,4 +1,7 @@
 extends State
+
+class_name On_Ground_State
+
 var characterBody : CharacterBody3D
 
 const MAX_VELOCITY_GROUND = 6.0
@@ -22,7 +25,7 @@ func enter(host):
 
 func physics_process(host, delta):
 	if characterBody.is_on_floor():
-		if Input.is_action_just_pressed("Shift"):
+		if Input.is_action_just_pressed("Shift") and characterBody.velocity.length() > 0:
 			return str("Slide")
 		else:
 			process_input()

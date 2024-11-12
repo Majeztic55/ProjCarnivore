@@ -1,9 +1,17 @@
 extends State
+
+class_name Slide_State
  
 var characterBody : CharacterBody3D
 @export var animationTreeLegs : AnimationTree
 
+@export var on_ground_state : On_Ground_State
+
 @onready var slideTimer : Timer = $SlideTimer
+@onready var standing_Collision : CollisionShape3D = $"../../Standing_CollisionShape3D"
+@onready var sliding_Collision : CollisionShape3D = $"../../Sliding_CollisionShape3D"
+@onready var sliding_ShapeCast : ShapeCast3D = $"../../Sliding_ShapeCast3D"
+
 var sliding : bool
 
 const MAX_VELOCITY_GROUND = 12.0
@@ -20,8 +28,12 @@ var wish_jump : bool
 func enter(host) -> void:
 	characterBody = host
 	sliding = true
+	
+	standing_Collision.disabled = true
+	sliding_Collision.disabled = false
+	
 	direction = Vector3()
-	direction -= characterBody.transform.basis.z
+	direction = on_ground_state.direction
 	
 	animationTreeLegs["parameters/conditions/is_sliding"] = true
 	animationTreeLegs["parameters/conditions/not_sliding"] = false
@@ -29,6 +41,8 @@ func enter(host) -> void:
 	slideTimer.start()
 
 func exit(host):
+	standing_Collision.disabled = false
+	sliding_Collision.disabled = true
 	animationTreeLegs["parameters/conditions/is_sliding"] = false
 	animationTreeLegs["parameters/conditions/not_sliding"] = true
 
@@ -89,4 +103,6 @@ func update_velocity_ground(wish_dir : Vector3, delta):
 
 func _on_slide_timer_timeout() -> void:
 	print("Slide timer timeout")
-	sliding = false
+	if !sliding_ShapeCast.is_colliding():
+		sliding = false
+		print("Not Sliding")
