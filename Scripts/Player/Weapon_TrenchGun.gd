@@ -5,20 +5,24 @@ extends Node3D
 
 var raycast_test_sphere = preload("res://Scenes/Utility/raycast_test_sphere.tscn")
 
-var range = 1000
+var range = 500
 
 func Shoot():
 	
 	var space_state = player_camera.get_world_3d().direct_space_state
 	var screen_centre = player_camera.get_viewport().size / 2
 	var origin = player_camera.project_ray_origin(screen_centre)
+	for i in range(6):
+		var spread = 20
+		var spread_vector = Vector3(randi_range(-spread, spread), randi_range(-spread, spread), randi_range(-spread, spread))
+		var end = (origin + player_camera.project_ray_normal(screen_centre) * range) + spread_vector
+		var query = PhysicsRayQueryParameters3D.create(origin, end)
+		query.collide_with_bodies = true
+		var result = space_state.intersect_ray(query)
+		
+		if result:
+			test_raycast(result.position)
 	
-	var end = origin + player_camera.project_ray_normal(screen_centre) * range
-	var query = PhysicsRayQueryParameters3D.create(origin, end)
-	query.collide_with_bodies = true
-	var result = space_state.intersect_ray(query)
-	if result:
-		test_raycast(result.position)
 
 func test_raycast(position : Vector3) -> void:
 	var instance = raycast_test_sphere.instantiate()
