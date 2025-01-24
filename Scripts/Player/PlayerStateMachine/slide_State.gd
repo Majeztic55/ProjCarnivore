@@ -73,6 +73,7 @@ func process_movement(delta):
 			
 			wish_jump = false
 		else:
+			characterBody.velocity.y -= GRAVITY
 			characterBody.velocity = update_velocity_ground(wish_dir, delta)
 	
 	# Move the player once velocity has been calculated

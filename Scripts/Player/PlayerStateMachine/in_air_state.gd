@@ -9,6 +9,7 @@ const MAX_VELOCITY_GROUND = 6.0
 const MAX_ACCELERATION = 10 * MAX_VELOCITY_GROUND
 const GRAVITY = 15.34
 const STOP_SPEED = 1.5
+const JUMP_IMPULSE = sqrt(5 * GRAVITY * 0.85)
 
 var friction = 4
 
@@ -24,10 +25,22 @@ func physics_process(host, delta):
 		process_input()
 		process_movement(delta)
 		
+		if (characterBody.is_on_wall()):
+			if (Input.is_action_pressed("Jump")) && Input.is_action_pressed("Foward"):
+				return str("Wall_Running")
+			elif(Input.is_action_just_pressed("Jump")):
+				wall_jump()
+		
 		return str(name)
 	
 	if (characterBody.is_on_floor()):
 		return str("On_Ground")
+	
+
+func wall_jump():
+	var wall_normal = characterBody.get_slide_collision(0)
+	characterBody.velocity += wall_normal.get_normal() * JUMP_IMPULSE
+	characterBody.velocity.y = JUMP_IMPULSE
 
 func process_input():
 	

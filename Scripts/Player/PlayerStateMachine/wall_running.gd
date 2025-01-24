@@ -1,19 +1,19 @@
 extends State
 
-class_name On_Ground_State
+class_name Wall_Running_State
 
 var characterBody : CharacterBody3D
 
-const MAX_VELOCITY_GROUND = 6.0
+const MAX_VELOCITY_GROUND = 12.0
 const MAX_ACCELERATION = 10 * MAX_VELOCITY_GROUND
-const GRAVITY = 15.34
+const GRAVITY = 1
 const STOP_SPEED = 1.5
-const JUMP_IMPULSE = sqrt(2.5 * GRAVITY * 0.85)
 
 var friction = 4
 
 var direction = Vector3()
-var wish_jump : bool
+
+var wall_normal
 
 @export var animationTreeArms : AnimationTree
 @export var animationTreeLegs : AnimationTree
@@ -21,21 +21,24 @@ var wish_jump : bool
 
 func enter(host):
 	characterBody = host
+	wall_normal = characterBody.get_slide_collision(0)
+
+func exit(host):
+	wall_normal = null
 
 func physics_process(host, delta):
-	if characterBody.is_on_floor():
-		if Input.is_action_just_pressed("Shift") and characterBody.velocity.length() > 0:
-			return str("Slide")
-		else:
+	if characterBody.is_on_wall() && !characterBody.is_on_floor() && Input.is_action_pressed("Jump") && Input.is_action_pressed("Foward"):
+			
 			process_input()
 			process_movement(delta)
 			manage_animationTreeLegs()
 			manage_animationTreeArms()
 			return str(name)
+	elif characterBody.is_on_floor():
+		return str("On_Ground")
 	else:
 		return str("In_Air")
 	
-
 func process_input():
 	
 	direction = Vector3()
@@ -49,22 +52,16 @@ func process_input():
 	if Input.is_action_pressed("Right"):
 		direction += characterBody.transform.basis.x
 	
-	wish_jump = Input.is_action_just_pressed("Jump")
+	direction += -wall_normal.get_normal() * (MAX_VELOCITY_GROUND / 10)
+	
 
 func process_movement(delta):
 	# Get the normalized input direction so that we don't move faster on diagonals
 	var wish_dir = direction.normalized()
 	
-	if characterBody.is_on_floor():
-		# If wish_jump is true then we won't apply any friction and allow the 
-		# player to jump instantly, this gives us a single frame where we can 
-		# perfectly bunny hop
-		if wish_jump:
-			characterBody.velocity.y = JUMP_IMPULSE
-			
-			wish_jump = false
-		else:
-			characterBody.velocity = update_velocity_ground(wish_dir, delta)
+	characterBody.velocity.y -= GRAVITY * delta
+	
+	characterBody.velocity = update_velocity_ground(wish_dir, delta)
 	
 	# Move the player once velocity has been calculated
 	characterBody.move_and_slide()

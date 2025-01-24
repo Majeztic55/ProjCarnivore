@@ -6,15 +6,20 @@ extends Node
 
 @export var WeaponObjects : Array[Node3D]
 
-var statemachine
+var anim_statemachine
 
 enum weapons {Hands, Blades, Shotgun}
 
 var currentWeapon
 
+var weapon_trenchgun : TrenchGun
+
 func _ready() -> void:
-	statemachine = animationTreeArms.get("parameters/playback")
+	anim_statemachine = animationTreeArms.get("parameters/playback")
 	swap_weapons(0)
+	
+	weapon_trenchgun = WeaponObjects[0]
+	
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("1"):
@@ -26,7 +31,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("3"):
 		swap_weapons(2)
 	
-	if Input.is_action_just_pressed("Left_Click"):
+	if Input.is_action_pressed("Left_Click"):
 		weapon_attack(currentWeapon)
 
 func swap_weapons(weapon: int):
@@ -55,10 +60,13 @@ func weapon_attack(weapon: int):
 			print("no attack for hands")
 		1:
 			var rand_animation = randi_range(0, 1)
-			statemachine.travel("BladesAttack")
+			anim_statemachine.travel("BladesAttack")
 			animationTreeArms["parameters/BladesAttack/bladesAttackBlend/blend_amount"] = rand_animation
 		2:
-			statemachine.travel("PlayerShotgunShoot")
+			if anim_statemachine.get_current_node() == "Shotgun":
+				weapon_trenchgun.Shoot()
+				anim_statemachine.travel("PlayerShotgunShoot")
+			
 
 func hide_all_weapons():
 	for i in WeaponObjects.size():
